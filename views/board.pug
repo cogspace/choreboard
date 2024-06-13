@@ -1,0 +1,106 @@
+extends base.pug
+
+block main
+  div(hx-get=`/boards/${board.id}/players` hx-trigger="every 2s")
+    include players.pug
+
+  .mb-3
+    button.form-control.btn.btn-lg(
+      data-bs-toggle="modal"
+      data-bs-target="#manage-players"
+    )
+      i.bi-person-gear &nbsp;
+      span Manage Players
+
+  #manage-players.modal.fade
+    .modal-dialog
+      .modal-content
+        .modal-header
+          .modal-title Manage Players
+          button.btn-close(
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          )
+        .modal-body
+          label.col-sm-2.col-form-label Edit Players
+
+          include manage-players-list.pug
+
+          form.m-0.p-0(method="POST" action="/players")
+            input(type="hidden" name="boardId" value=board.id)
+            label.col-sm-2.col-form-label Add Player
+            .input-group.mb-3
+              input#add-player-color.form-control.form-control-color(
+                style="max-width: 48px;"
+                type="color"
+                name="color"
+              )
+              input#add-player-name.form-control(
+                type="text"
+                name="name"
+                required
+                placeholder="Name"
+              )
+              button.form-control.btn.btn-primary(
+                type="submit"
+                style="max-width: 48px;"
+              )
+                i.bi-person-plus
+
+  #do-chore.modal.fade
+    .modal-dialog
+      .modal-content
+        .modal-header
+          .modal-title Do Chore
+          button.btn-close(
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          )
+        .modal-body
+          include chores-list.pug
+        .modal-footer
+            button.form-control.btn.btn-primary.btn-lg(
+              data-bs-toggle="modal"
+              data-bs-target="#add-chore"
+            )
+              i.bi-plus &nbsp;
+              span New Chore
+
+  #add-chore.modal.fade
+    .modal-dialog
+      .modal-content
+        .modal-header
+          .modal-title Add Chore
+          button.btn-close(
+            aria-label="Close"
+            data-bs-toggle="modal"
+            data-bs-target="#do-chore"
+          )
+
+        form.m-0.p-0(
+          hx-post="/chores"
+          hx-target="#chores-list"
+        )
+          input(type="hidden" name="boardId" value=board.id)
+          .modal-body
+            .mb-3
+              label.col-sm-2.col-form-label(for="add-chore-name") Name
+              input#add-chore-name.form-control(
+                type="text"
+                name="name"
+                required
+              )
+            .mb-3
+              label.col-sm-2.col-form-label(for="add-chore-points") Points
+              input#add-chore-points.form-control(
+                type="number"
+                name="points"
+                required
+              )
+          .modal-footer
+            button.btn.btn-primary(
+              data-bs-toggle="modal"
+              data-bs-target="#do-chore"
+            )
+              i.bi-clipboard-check &nbsp;
+              span Add Chore
