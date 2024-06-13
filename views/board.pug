@@ -22,7 +22,6 @@ block main
             aria-label="Close"
           )
         .modal-body
-          label.col-sm-2.col-form-label Edit Players
 
           include manage-players-list.pug
 
@@ -51,7 +50,7 @@ block main
     .modal-dialog
       .modal-content
         .modal-header
-          .modal-title Do Chore
+          .modal-title Track Chore
           button.btn-close(
             data-bs-dismiss="modal"
             aria-label="Close"
@@ -59,7 +58,7 @@ block main
         .modal-body
           include chores-list.pug
         .modal-footer
-            button.form-control.btn.btn-primary.btn-lg(
+            button.form-control.btn.btn-lg(
               data-bs-toggle="modal"
               data-bs-target="#add-chore"
             )
@@ -88,6 +87,7 @@ block main
               input#add-chore-name.form-control(
                 type="text"
                 name="name"
+                placeholder="e.g. Do the Dishes"
                 required
               )
             .mb-3
@@ -95,6 +95,7 @@ block main
               input#add-chore-points.form-control(
                 type="number"
                 name="points"
+                placeholder="e.g. 5"
                 required
               )
           .modal-footer
