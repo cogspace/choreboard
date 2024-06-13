@@ -83,7 +83,8 @@ app.post('/chores', async (req, res) => {
 	const id = crypto.randomUUID()
 	const { boardId, name, points } = req.body
 	await Chore.create({ id, boardId, name, points })
-	res.redirect(`/boards/${boardId}`)
+	const chores = await Chore.findAll({ where: { boardId } })
+	res.render('chores-list', { chores })
 })
 
 app.post('/do-chore', async (req, res) => {
