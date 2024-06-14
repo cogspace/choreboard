@@ -55,11 +55,22 @@ app.post('/boards', async (req, res) => {
 	res.redirect(`/boards/${id}`)
 })
 
-app.post('/players', async (req, res) => {
+app.post('/boards/:boardId/players', async (req, res) => {
 	const id = crypto.randomUUID()
-	const { boardId, name, color } = req.body
+	const { boardId } = req.params
+	const { name, color } = req.body
 	await Player.create({ id, boardId, name, color, points: 0 })
-	res.redirect(`/boards/${boardId}`)
+	const players = await Player.findAll({ where: { boardId } })
+	res.render('manage-players-list', { players })
+})
+
+app.post('/boards/:boardId/chores', async (req, res) => {
+	const id = crypto.randomUUID()
+	const { boardId } = req.params
+	const { name, points } = req.body
+	await Chore.create({ id, boardId, name, points })
+	const chores = await Chore.findAll({ where: { boardId } })
+	res.render('manage-chores-list', { chores })
 })
 
 app.put('/manage-players/:playerId', async (req, res) => {
@@ -71,12 +82,29 @@ app.put('/manage-players/:playerId', async (req, res) => {
 	res.render('manage-players-list', { players })
 })
 
+app.put('/manage-chores/:choreId', async (req, res) => {
+	const { choreId } = req.params
+	const { name, points } = req.body
+	const chore = await Chore.findByPk(choreId)
+	await chore.update({ name, points })
+	const chores = await Chore.findAll({ where: { boardId: chore.boardId } })
+	res.render('manage-chores-list', { chores })
+})
+
 app.delete('/manage-players/:playerId', async (req, res) => {
 	const { playerId } = req.params
 	const player = await Player.findByPk(playerId)
 	await player.destroy();
 	const players = await Player.findAll({ where: { boardId: player.boardId } })
 	res.render('manage-players-list', { players })
+})
+
+app.delete('/manage-chores/:choreId', async (req, res) => {
+	const { choreId } = req.params
+	const chore = await Chore.findByPk(choreId)
+	await chore.destroy();
+	const chores = await Chore.findAll({ where: { boardId: chore.boardId } })
+	res.render('manage-chores-list', { chores })
 })
 
 app.post('/chores', async (req, res) => {
@@ -100,6 +128,12 @@ app.get('/boards/:boardId/players', async (req, res) => {
 	const { boardId } = req.params
 	const players = await Player.findAll({ where: { boardId } })
 	res.render('players', { players })
+})
+
+app.get('/boards/:boardId/chores', async (req, res) => {
+	const { boardId } = req.params
+	const chores = await Chore.findAll({ where: { boardId } })
+	res.render('chores-list', { chores })
 })
 
 app.get('/node_modules/**', async (req, res) => {

@@ -1,0 +1,61 @@
+each chore in chores
+  form.m-0.p-0.input-group.mb-3(
+    hx-put=`/manage-chores/${chore.id}`
+    hx-target="#manage-chores-list"
+  )
+    input.form-control(
+      type="text"
+      placeholder="Name"
+      name="name"
+      initialValue=chore.name
+      value=chore.name
+      required
+      _=`on change
+          add .d-none to the next .-cb-btn-delete
+          remove .d-none from the next .-cb-btn-submit
+          remove .d-none from the next .-cb-btn-cancel
+        end
+        on reset
+          set @value to @initialValue
+        end`
+    )
+    input.form-control(
+      type="number"
+      style="max-width: 64px;"
+      placeholder="Pts"
+      name="points"
+      initialValue=chore.points
+      value=chore.points
+      required
+      _=`on change
+          add .d-none to the next .-cb-btn-delete
+          remove .d-none from the next .-cb-btn-submit
+          remove .d-none from the next .-cb-btn-cancel
+        end
+        on reset
+          set @value to @initialValue
+        end`
+    )
+    button.form-control.btn.btn-danger.-cb-btn-delete(
+      style="max-width: 48px;"
+      hx-delete=`/manage-chores/${chore.id}`
+      hx-target="#manage-chores-list"
+      _="on click halt"
+    )
+      i.bi-trash
+    button.form-control.btn.btn-primary.-cb-btn-submit.d-none(
+      type="submit"
+      style="max-width: 48px;"
+    )
+      i.bi-check
+    button.form-control.btn.btn-secondary.-cb-btn-cancel.d-none(
+      style="max-width: 48px;"
+      _=`on click
+          send reset to the previous <[name=name]/>
+          send reset to the previous <[name=color]/>
+          remove .d-none from the previous .-cb-btn-delete
+          remove .d-none from the previous .-cb-btn-cancel
+          add .d-none to me
+          halt`
+    )
+      i.bi-x
