@@ -6,13 +6,10 @@
     "start": "node app.js"
   },
   "dependencies": {
-    "bootstrap": "^5.3.3",
-    "bootstrap-icons": "^1.11.3",
     "express": "^4.19.2",
-    "htmx.org": "^1.9.12",
-    "hyperscript": "^2.0.2",
+    "express-validator": "^7.1.0",
+    "mysql2": "^3.10.1",
     "pug": "^3.0.3",
-    "sequelize": "^6.37.3",
-    "sqlite3": "^5.1.7"
+    "sequelize": "^6.37.3"
   }
 }

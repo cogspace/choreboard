@@ -1,18 +1,17 @@
-#players
-  if players.length == 0
-    .container.text-center
-      i.bi-person-slash(style=`
-        font-size: 256px;
-        opacity: 25%;
-      `)
-      p There's nobody here yet...
-  each player in players
-    .mb-3
-      button.form-control.btn.btn-lg.d-flex.justify-content-between(
-        style=`background-color: ${player.color};`
-        _=`on click set global playerId to "${player.id}"`
-        data-bs-toggle="modal"
-        data-bs-target="#do-chore"
-      )
-        .fs-1= player.name
-        .fs-1= player.points 
+if players.length == 0
+  .container.text-center
+    i.bi-person-slash(style=`
+      font-size: 256px;
+      opacity: 25%;
+    `)
+    p There's nobody here yet...
+each player in players
+  .mb-3
+    button.form-control.btn.btn-lg.d-flex.justify-content-between(
+      style=`background-color: ${player.color};`
+      _=`on click set global playerId to "${player.id}"`
+      data-bs-toggle="modal"
+      data-bs-target="#do-chore"
+    )
+      .fs-1= player.name
+      .fs-1= player.points 

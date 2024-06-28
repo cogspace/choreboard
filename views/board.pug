@@ -1,8 +1,7 @@
 extends base.pug
 
 block main
-
-  div(hx-get=`/boards/${board.id}/players` hx-trigger="every 2s")
+  #players
     include players.pug
 
   .mb-3
@@ -59,8 +58,9 @@ block main
             data-bs-dismiss="modal"
             aria-label="Close"
           )
-        .modal-body(hx-get=`/boards/${board.id}/chores` hx-trigger="every 2s")
-          include chores-list.pug
+        .modal-body
+          #chores-list
+            include chores-list.pug
         .modal-footer
           button.form-control.btn.btn-lg(
             data-bs-toggle="modal"

@@ -1,21 +1,20 @@
-#chores-list
-  if chores.length == 0
-    .text-center No chores defined yet
-  each chore in chores
-    .mb-3
-      form.m-0.p-0(
-        hx-post="/do-chore"
-        hx-target="#players"
+if chores.length == 0
+  .text-center No chores defined yet
+each chore in chores
+  .mb-3
+    form.m-0.p-0(
+      hx-post="/do-chore"
+      hx-target="#players"
+    )
+      input(type="hidden" name="playerId" value=""
+        _="on prepare set @value to playerId"
       )
-        input(type="hidden" name="playerId" value=""
-          _="on prepare set @value to playerId"
-        )
-        input(type="hidden" name="choreId" value=chore.id)
-        button.form-control.btn.btn-lg.d-flex.justify-content-between(
-          class=chore.points < 0 ? 'btn-danger' : 'btn-primary'
-          data-bs-toggle="modal"
-          data-bs-target="#do-chore"
-          _="on click send prepare to previous <[name=playerId]/>"
-        ) 
-          span= chore.name
-          span #{chore.points >= 0 ? '+' : ''}#{chore.points}
+      input(type="hidden" name="choreId" value=chore.id)
+      button.form-control.btn.btn-lg.d-flex.justify-content-between(
+        class=chore.points < 0 ? 'btn-danger' : 'btn-primary'
+        data-bs-toggle="modal"
+        data-bs-target="#do-chore"
+        _="on click send prepare to previous <[name=playerId]/>"
+      ) 
+        span= chore.name
+        span #{chore.points >= 0 ? '+' : ''}#{chore.points}
