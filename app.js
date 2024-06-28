@@ -84,6 +84,19 @@ app.post('/boards/:boardId/players', async (req, res) => {
 app.put('/manage-players/:playerId', async (req, res) => {
 	const { playerId } = req.params
 	const { color, name, points } = req.body
+
+	if (points != null && !re_integer.test(points)) {
+		res.status(400)
+		res.send('Bad points value')
+		return
+	}
+
+	if (name != null && name.length < 1) {
+		res.status(400)
+		res.send('Bad name value')
+		return
+	}
+
 	const player = await Player.findByPk(playerId)
 	await player.update({ color, name, points })
 	const players = await getAllPlayers(player.boardId)
