@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const crypto = require('node:crypto')
 const bodyParser = require('body-parser')
