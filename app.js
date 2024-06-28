@@ -49,6 +49,8 @@ function getAllChores(boardId) {
 	return Chore.findAll({ where: { boardId }, order: [['name', 'ASC']] })
 }
 
+re_integer = /^\s*-?[0-9]+\s*$/
+
 // BOARDS
 
 app.get('/boards/:boardId', async (req, res) => {
@@ -118,9 +120,20 @@ app.post('/boards/:boardId/chores', async (req, res) => {
 
 app.put('/manage-chores/:choreId', async (req, res) => {
 	const { choreId } = req.params
-	const { name, points } = req.body
-	console.log(points, 'is a', typeof points)
-	console.log(req.body)
+	let { name, points } = req.body
+
+	if (points != null && !re_integer.test(points)) {
+		res.status(400)
+		res.send('Bad points value')
+		return
+	}
+
+	if (name != null && name.length < 1) {
+		res.status(400)
+		res.send('Bad name value')
+		return
+	}
+
 	const chore = await Chore.findByPk(choreId)
 	await chore.update({ name, points })
 	const chores = await getAllChores(chore.boardId)
