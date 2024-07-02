@@ -44,7 +44,7 @@ app.use(bodyParser.json())
 app.set('view engine', 'pug')
 
 function getAllPlayers(boardId) {
-	return Player.findAll({ where: { boardId }, order: [['name', 'ASC']] })
+	return Player.findAll({ where: { boardId }, order: [['score', 'DESC']] })
 }
 
 function getAllChores(boardId) {
