@@ -36,6 +36,17 @@ const Chore = sequelize.define('Chore', {
 	points: { type: DataTypes.INTEGER, allowNull: false },
 })
 
+const ChoreRecord = sequelize.define('ChoreRecord', {
+	id: { type: DataTypes.STRING, primaryKey: true },
+	boardId: { type: DataTypes.STRING, allowNull: false },
+	choreId: { type: DataTypes.STRING, allowNull: false },
+	playerId: { type: DataTypes.STRING, allowNull: false },
+	// The below fields are duplicated from Chore in case the referenced Chore
+	// object changes.
+	name: { type: DataTypes.STRING, allowNull: false },
+	points: { type: DataTypes.INTEGER, allowNull: false },
+})
+
 sequelize.sync()
 
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -49,6 +60,20 @@ function getAllPlayers(boardId) {
 
 function getAllChores(boardId) {
 	return Chore.findAll({ where: { boardId }, order: [['name', 'ASC']] })
+}
+
+async function recordChore(choreId, playerId) {
+	const chore = await Chore.findByPk(choreId)
+	const player = await Player.findByPk(playerId)
+	await player.update({ points: player.points + chore.points })
+	return ChoreRecord.create({
+		id: randomID(),
+		boardId: player.boardId,
+		choreId,
+		playerId,
+		name: chore.name,
+		points: chore.points,
+	})
 }
 
 re_integer = /^\s*-?[0-9]+\s*$/
@@ -115,10 +140,8 @@ app.delete('/manage-players/:playerId', async (req, res) => {
 
 app.post('/do-chore', async (req, res) => {
 	const { playerId, choreId } = req.body
-	const chore = await Chore.findByPk(choreId)
-	const player = await Player.findByPk(playerId)
-	await player.update({ points: player.points + chore.points })
-	const players = await getAllPlayers(player.boardId)
+	const choreRecord = await recordChore(choreId, playerId);
+	const players = await getAllPlayers(choreRecord.boardId)
 	res.render('update-players', { players })
 })
 
